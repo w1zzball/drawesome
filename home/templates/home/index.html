@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
-  </head>
-  <body>
-    <h1>Welcome to Drawesome!</h1>
-  </body>
-</html>
+{% extends 'base_generic.html' %}
+{% load static %}
+
+{% block content %}
+  <h1>Welcome to Drawesome</h1>
+  <p>Challenge your friends to guess your drawings and see who has the best artistic skills!</p>
+  <p>Create hilarious masterpieces, compete for high scores, and enjoy endless drawing fun.</p>
+  {% comment %} <div class="cta-container mt-4">
+    <a href="{% url 'game:start' %}" class="btn btn-primary btn-lg">Start Drawing Now!</a>
+  </div> {% endcomment %}
+{% endblock %}
