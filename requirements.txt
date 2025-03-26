@@ -23,3 +23,6 @@ psycopg2==2.9.10
 sqlparse==0.5.3
 tzdata==2025.2
 urllib3==2.2.3
+dj-database-url==2.3.0
+typing_extensions==4.13.0
+whitenoise==6.9.0
