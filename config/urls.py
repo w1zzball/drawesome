@@ -19,7 +19,8 @@ from django.urls import path, include
 from home import views  # Import views from the home app
 
 urlpatterns = [
+    path('', views.home, name='home'),  # Add root path
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    path('', views.home, name='home'),  # Add root path
+    path('game/', include('game.urls')),  # Add game path
 ]
