@@ -1,4 +1,5 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
+from django.shortcuts import render
 import json
 
 
@@ -64,3 +65,7 @@ class DrawingConsumer(AsyncWebsocketConsumer):
             'y': y,
             'action': action
         }))
+
+
+def game(request):
+    return render(request, 'game.html')
