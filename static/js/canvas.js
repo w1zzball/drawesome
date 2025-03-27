@@ -109,6 +109,55 @@ canvas.addEventListener('mouseleave', () => {
     }
 });
 
+// Add touch event listeners for drawing on touch devices
+canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault(); // Prevent scrolling or other default touch actions
+    isDrawing = true;
+
+    const touch = e.touches[0];
+    const { x, y } = getScaledCoordinates(touch);
+
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+
+    // Send the starting point to the server
+    socket.send(JSON.stringify({
+        'x': x,
+        'y': y,
+        'action': 'start'
+    }));
+});
+
+canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault(); // Prevent scrolling or other default touch actions
+    if (!isDrawing) return;
+
+    const touch = e.touches[0];
+    const { x, y } = getScaledCoordinates(touch);
+
+    ctx.lineTo(x, y);
+    ctx.stroke();
+
+    // Send the drawing coordinates to the server
+    socket.send(JSON.stringify({
+        'x': x,
+        'y': y,
+        'action': 'draw'
+    }));
+});
+
+canvas.addEventListener('touchend', () => {
+    if (isDrawing) {
+        isDrawing = false;
+        ctx.closePath();
+
+        // Notify the server that drawing has stopped
+        socket.send(JSON.stringify({
+            'action': 'end'
+        }));
+    }
+});
+
 // Handle incoming messages from the WebSocket
 socket.onmessage = function (e) {
     const data = JSON.parse(e.data);
