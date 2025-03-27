@@ -2,8 +2,9 @@
 const clientId = 'user_' + Math.random().toString(36).substr(2, 9)
 document.getElementById('client-id').textContent = `(ID: ${clientId})`
 
-// WebSocket connection setup
-let url = `ws://${window.location.host}/ws/socket-server/`
+// WebSocket connection setup - FIXED to support HTTPS/WSS
+const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+let url = `${protocol}${window.location.host}/ws/socket-server/`
 const socket = new WebSocket(url)
 
 // Canvas setup
