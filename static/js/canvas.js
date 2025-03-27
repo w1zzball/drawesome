@@ -40,6 +40,10 @@ ctx.lineCap = 'round'
 ctx.lineWidth = 5
 ctx.strokeStyle = initialColor
 
+// Set canvas background to white
+ctx.fillStyle = '#FFFFFF'
+ctx.fillRect(0, 0, canvas.width, canvas.height)
+
 /**
  * Fix for coordinate scaling problem:
  * - Canvas has a logical size (width/height attributes)
@@ -213,9 +217,9 @@ socket.onmessage = (e) => {
     console.log(data)
 
     // Skip processing our own messages
-    if (data.clientId === clientId) {
-        return
-    }
+    // if (data.clientId === clientId) {
+    //     return
+    // }
 
     if (data.type === 'chat_message') {
         let messages = document.getElementById('chat-messages')
