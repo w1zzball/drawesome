@@ -10,7 +10,7 @@
   align-self: start;
 }
 
-#game-container {
+.container {
   display: flex;
   flex-direction: row;
   width: 100%;

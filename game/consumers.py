@@ -1,66 +1,87 @@
-from channels.generic.websocket import AsyncWebsocketConsumer
 import json
+from channels.generic.websocket import WebsocketConsumer
+from asgiref.sync import async_to_sync
 
 
-class DrawingConsumer(AsyncWebsocketConsumer):
-    async def connect(self):
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = f'drawing_{self.room_name}'
+class ChatConsumer(WebsocketConsumer):
+    def connect(self):
+        # This is the name of the group that the user will join
+        self.room_group_name = 'test'
+        async_to_sync(self.channel_layer.group_add)(
+            self.room_group_name,
+            self.channel_name
+        )
+        self.accept()
 
-        # Join the room group
-        await self.channel_layer.group_add(
+    def disconnect(self, close_code):
+        async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name,
             self.channel_name
         )
 
-        await self.accept()
+    def receive(self, text_data):
+        text_data_json = json.loads(text_data)
 
-    async def disconnect(self, close_code):
-        # Leave the room group
-        await self.channel_layer.group_discard(
-            self.room_group_name,
-            self.channel_name
-        )
+        # Identify the message type
+        message_type = text_data_json.get('type', 'chat_message')
+        client_id = text_data_json.get('clientId', 'anonymous')
 
-    async def receive(self, text_data):
-        try:
-            # Receive drawing data from WebSocket
-            text_data_json = json.loads(text_data)
-            x = text_data_json.get('x')
-            y = text_data_json.get('y')
-            action = text_data_json.get('action')
-
-            # Validate the data
-            if x is None or y is None or action is None:
-                await self.send(text_data=json.dumps({
-                    'error': 'Invalid data received'
-                }))
-                return
-
-            # Send the drawing data to the room group
-            await self.channel_layer.group_send(
+        if message_type == 'chat_message':
+            message = text_data_json['message']
+            color = text_data_json.get('color', '#000000')
+            async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name,
                 {
-                    'type': 'draw_data',  # This maps to the draw_data method
-                    'x': x,
-                    'y': y,
-                    'action': action
+                    'type': 'chat_message',
+                    'message': message,
+                    'clientId': client_id,
+                    'color': color
                 }
             )
-        except json.JSONDecodeError:
-            # Handle invalid JSON
-            await self.send(text_data=json.dumps({
-                'error': 'Invalid JSON format'
-            }))
+        elif message_type == 'draw_line':
+            async_to_sync(self.channel_layer.group_send)(
+                self.room_group_name,
+                {
+                    'type': 'draw_line',
+                    'clientId': client_id,
+                    'from': text_data_json['from'],
+                    'to': text_data_json['to'],
+                    'color': text_data_json['color'],
+                    'lineWidth': text_data_json['lineWidth']
+                }
+            )
+        elif message_type == 'clear_canvas':
+            async_to_sync(self.channel_layer.group_send)(
+                self.room_group_name,
+                {
+                    'type': 'clear_canvas',
+                    'clientId': client_id
+                }
+            )
 
-    async def draw_data(self, event):
-        x = event['x']
-        y = event['y']
-        action = event['action']
+    def chat_message(self, event):
+        message = event['message']
+        client_id = event.get('clientId', 'anonymous')
+        color = event.get('color', '#000000')
+        self.send(text_data=json.dumps({
+            'type': 'chat_message',
+            'message': message,
+            'clientId': client_id,
+            'color': color
+        }))
 
-        # Send drawing data to WebSocket
-        await self.send(text_data=json.dumps({
-            'x': x,
-            'y': y,
-            'action': action
+    def draw_line(self, event):
+        self.send(text_data=json.dumps({
+            'type': 'draw_line',
+            'clientId': event['clientId'],
+            'from': event['from'],
+            'to': event['to'],
+            'color': event['color'],
+            'lineWidth': event['lineWidth']
+        }))
+
+    def clear_canvas(self, event):
+        self.send(text_data=json.dumps({
+            'type': 'clear_canvas',
+            'clientId': event['clientId']
         }))
