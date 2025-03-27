@@ -1,0 +1,24 @@
+nav {
+  background-color: var(--primary-color);
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+nav a {
+  color: var(--text-color);
+  text-decoration: none;
+  margin: 0 1rem;
+  font-size: 1rem;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+#logo {
+  height: 50px;
+  border-radius: 50%;
+}

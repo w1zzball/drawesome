@@ -4,23 +4,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Drawesome</title>
+    <title>
+      Drawesome |{% block title %}
+        Home
+      {% endblock %}
+    </title>
     {% comment %}styles{% endcomment %}
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/buttons.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/nav.css' %}" />
     {% block extra_css %}
 
     {% endblock %}
   </head>
   <body>
     <header>
-      <nav>
+      <nav class="rounded">
         <a href="{% url 'home' %}"><img id="logo" src="{% static 'images/logo.png' %}" alt="Drawesome Logo" /></a>
 
         {% if user.is_authenticated %}
           {% if game_playing %}
             {% comment %}display game info{% endcomment %}
           {% else %}
-            <a href="#">Draw</a>
+            <a href="/game">Draw</a>
           {% endif %}
           <a href="/accounts/logout">Logout</a>
           {% if game_playing %}

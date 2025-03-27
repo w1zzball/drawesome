@@ -1,42 +1,50 @@
+#game-meta div {
+  border-radius: 4px;
+}
+
 #drawingCanvas {
-  border: 1px solid black;
+  border: 1px solid var(--border-color);
   display: block;
   max-width: 100%;
   height: auto;
+  align-self: start;
 }
 
 #game-container {
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 80vh; /* Adjust as needed */
+  height: 80vh;
+  gap: 5px;
 }
 
 #game-area {
-  flex: 4; /* Takes up 4/5 of the space */
+  flex: 4;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 10px;
-  overflow: hidden; /* Prevents canvas overflow */
+  overflow: hidden;
+  background-color: var(--primary-color);
 }
 
 #game-sidebar {
-  flex: 1; /* Takes up 1/5 of the space */
-  background-color: #f5f5f5;
+  flex: 1;
+  background-color: var(--primary-color);
   padding: 15px;
   display: flex;
   flex-direction: column;
-  border-left: 1px solid #ddd;
+  border-left: 1px solid var(--border-color);
 }
 
 #game-chat {
   flex: 1;
   overflow-y: auto;
   margin-bottom: 15px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   padding: 10px;
-  background-color: white;
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 #game-guess {
@@ -47,33 +55,21 @@
   width: 100%;
   padding: 8px;
   margin-bottom: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  max-width: fit-content;
 }
 
-#guess-button {
-  width: 100%;
-  padding: 8px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-#guess-button:hover {
-  background-color: #45a049;
-}
-
-/* Make sure the game-meta container doesn't restrict width */
 #game-meta {
   width: 100%;
 }
 
-/* Style the game header */
 #game-header {
   padding: 10px;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #ddd;
+  background-color: var(--primary-color);
+  border-bottom: 1px solid var(--border-color);
   margin-bottom: 10px;
+  color: var(--text-color);
 }
