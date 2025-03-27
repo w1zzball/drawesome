@@ -90,6 +90,8 @@ colorPicker.addEventListener('input', function () {
 // Clear canvas
 clearButton.addEventListener('click', function () {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
     socket.send(
         JSON.stringify({
             type: 'clear_canvas',
@@ -235,6 +237,8 @@ socket.onmessage = (e) => {
         drawReceivedLine(data.from, data.to, data.color, data.lineWidth)
     } else if (data.type === 'clear_canvas') {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
+
         // You could add a message showing who cleared the canvas
         let messages = document.getElementById('chat-messages')
         messages.insertAdjacentHTML('beforeend', `<p><em>Canvas cleared by user ${data.clientId.substring(0, 6)}</em></p>`)
