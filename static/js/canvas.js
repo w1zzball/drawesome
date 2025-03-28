@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.onmessage = (e) => {
         try {
             const data = JSON.parse(e.data);
-            console.log('Message received:', data);
+            //console.log('Message received:', data);
 
             // Process messages - now showing own messages too
             if (data.type === 'chat_message') {
