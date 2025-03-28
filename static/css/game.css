@@ -5,7 +5,7 @@
 #drawingCanvas {
   border: 1px solid var(--border-color);
   display: block;
-  width: 100%;
+  height: 100%;
   max-width: 100%;
   height: auto;
   align-self: start;
