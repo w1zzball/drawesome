@@ -23,21 +23,14 @@
         <a href="{% url 'home' %}"><img id="logo" src="{% static 'images/logo.png' %}" alt="Drawesome Logo" /></a>
 
         {% if user.is_authenticated %}
-          {% if game_playing %}
-            {% comment %}display game info{% endcomment %}
-          {% else %}
-            <a href="/game">Draw</a>
-            <a href="/rooms/create">Create Room</a>
-            <a href="/rooms">Browse Rooms</a>
-          {% endif %}
           <a href="/accounts/logout">Logout</a>
-          {% if game_playing %}
-            {% comment %}game quit stuff{% endcomment %}
-          {% endif %}
         {% else %}
           <a href="/accounts/login">Login</a>
           <a href="/accounts/signup">Register</a>
         {% endif %}
+        <a href="/game">Draw</a>
+        <a href="/rooms/create">Create Room</a>
+        <a href="/rooms">Browse Rooms</a>
       </nav>
     </header>
     <main>
