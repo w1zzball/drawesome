@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // WebSocket connection setup
     const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
-    const url = `${protocol}${window.location.host}/ws/room/${roomCode}/`;  // Ensure this matches the Django route
+    // Change this to match your routing.py pattern - notice "drawing" not "room"
+    const url = `${protocol}${window.location.host}/ws/drawing/${roomCode}/`;
     console.log('Connecting to WebSocket:', url);
     const socket = new WebSocket(url);
 
@@ -85,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (clearButton) {
         clearButton.addEventListener('click', function () {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#FFFFFF';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             socket.send(
@@ -94,6 +96,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     roomCode: roomCode
                 })
             );
+
+            // Save the cleared canvas state
+            saveCanvasState();
         });
     }
 
@@ -182,7 +187,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function stopDrawing() {
-        isDrawing = false;
+        if (isDrawing) {
+            isDrawing = false;
+            saveCanvasState(); // Save canvas state when drawing stops
+        }
     }
 
     // Draw received line from other clients
@@ -228,10 +236,48 @@ document.addEventListener('DOMContentLoaded', () => {
         return div.innerHTML;
     }
 
+    // Save canvas state after significant changes
+    function saveCanvasState() {
+        try {
+            // Compress the image more by reducing quality
+            const imageData = canvas.toDataURL('image/jpeg', 0.5);
+
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                console.log(`Saving canvas state for room: ${roomCode}`);
+                socket.send(
+                    JSON.stringify({
+                        type: 'canvas_save',
+                        clientId: clientId,
+                        roomCode: roomCode,
+                        image_data: imageData
+                    })
+                );
+            } else {
+                console.warn('Cannot save canvas state: WebSocket not connected');
+            }
+        } catch (e) {
+            console.error('Error saving canvas state:', e);
+        }
+    }
+
+    // Set up periodic canvas state saving (every 2 seconds)
+    const SAVE_INTERVAL = 2000; // 2 seconds
+    setInterval(saveCanvasState, SAVE_INTERVAL);
+
     // WebSocket event handlers
     socket.onopen = () => {
         console.log('WebSocket connection established');
-        // Send a join message
+
+        // Request the current canvas state
+        socket.send(
+            JSON.stringify({
+                type: 'request_canvas_state',
+                clientId: clientId,
+                roomCode: roomCode
+            })
+        );
+
+        // Then send a join message
         socket.send(
             JSON.stringify({
                 type: 'chat_message',
@@ -254,10 +300,34 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.onmessage = (e) => {
         try {
             const data = JSON.parse(e.data);
-            //console.log('Message received:', data);
+            console.log('Message received of type:', data.type); // More specific logging
 
-            // Process messages - now showing own messages too
-            if (data.type === 'chat_message') {
+            if (data.type === 'canvas_state') {
+                console.log('Canvas state received, loading image...');
+                // Load the existing canvas state
+                if (data.image_data && (data.image_data.startsWith('data:image/jpeg') ||
+                    data.image_data.startsWith('data:image/png'))) {
+                    const img = new Image();
+                    img.onload = function () {
+                        console.log('Image loaded successfully, dimensions:', img.width, 'x', img.height);
+                        // Clear the canvas first
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        // Draw the saved canvas state
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    };
+                    img.onerror = function (error) {
+                        console.error('Error loading canvas image:', error);
+                    };
+                    img.src = data.image_data;
+                } else {
+                    console.warn('Invalid or missing image data received:',
+                        data.image_data ? data.image_data.substring(0, 30) + '...' : 'undefined');
+                }
+            } else if (data.type === 'request_canvas_state' && data.clientId !== clientId) {
+                // If someone else is requesting the canvas state and we have it, send it
+                // This helps when the server doesn't have the latest state
+                saveCanvasState();
+            } else if (data.type === 'chat_message') {
                 let messages = document.getElementById('chat-messages');
                 if (messages) {
                     const sender = data.clientId ? `User ${data.clientId.substring(0, 6)}` : 'Anonymous';
@@ -281,6 +351,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (messages) {
                     const sender = data.clientId ? `User ${data.clientId.substring(0, 6)}` : 'Anonymous';
                     messages.insertAdjacentHTML('beforeend', `<p><em>Canvas cleared by user ${sender}</em></p>`);
+                }
+
+                // After clearing, save the new state
+                if (data.clientId !== clientId) {
+                    saveCanvasState();
                 }
             }
         } catch (error) {
