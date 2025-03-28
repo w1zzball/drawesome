@@ -25,8 +25,8 @@
                 <p>Created by {{ room.creator.username }} on {{ room.created_at|date:'M d, Y' }}</p>
               </div>
               <div class="room-actions">
-                <a href="{% url 'game:room' room_slug=room.slug %}" class="btn btn-sm btn-success">Join</a>
-                <button class="btn btn-sm btn-info copy-link" data-url="{{ request.scheme }}://{{ request.get_host }}{% url 'game:room' room_slug=room.slug %}">Share Link</button>
+                <a href="{% url 'rooms:room' room_slug=room.slug %}" class="btn btn-sm btn-success">Join</a>
+                <button class="btn btn-sm btn-info copy-link" data-url="{{ request.scheme }}://{{ request.get_host }}{% url 'rooms:room' room_slug=room.slug %}">Share Link</button>
               </div>
             </li>
           {% endfor %}
