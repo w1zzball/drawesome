@@ -21,6 +21,8 @@ from home import views  # Import views from the home app
 urlpatterns = [
     path('', views.home, name='home'),  # Add root path
     path('admin/', admin.site.urls),
+    path('rooms/', include('rooms.urls')),  # Add rooms path
     path('accounts/', include('allauth.urls')),
     path('game/', include('game.urls')),  # Add game path
+
 ]

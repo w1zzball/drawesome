@@ -1,0 +1,54 @@
+{% extends 'base_generic.html' %}
+{% load static %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/game.css' %}" />
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h1>Drawing Rooms</h1>
+
+    <div class="room-actions">
+      <a href="{% url 'rooms:create_room' %}" class="btn btn-primary">Create New Room</a>
+      <a href="{% url 'rooms:room' room_slug='lobby' %}" class="btn btn-secondary">Join Public Room</a>
+    </div>
+
+    <div class="room-list">
+      <h2>Available Rooms</h2>
+      {% if rooms %}
+        <ul class="rooms">
+          {% for room in rooms %}
+            <li class="room-item">
+              <div class="room-info">
+                <h3>{{ room.name }}</h3>
+                <p>Created by {{ room.creator.username }} on {{ room.created_at|date:'M d, Y' }}</p>
+              </div>
+              <div class="room-actions">
+                <a href="{% url 'game:room' room_slug=room.slug %}" class="btn btn-sm btn-success">Join</a>
+                <button class="btn btn-sm btn-info copy-link" data-url="{{ request.scheme }}://{{ request.get_host }}{% url 'game:room' room_slug=room.slug %}">Share Link</button>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No rooms available. Be the first to create one!</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <script>
+    // Helper to copy room URLs
+    document.querySelectorAll('.copy-link').forEach((button) => {
+      button.addEventListener('click', () => {
+        const url = button.dataset.url
+        navigator.clipboard.writeText(url).then(() => {
+          button.textContent = 'Copied!'
+          setTimeout(() => {
+            button.textContent = 'Share Link'
+          }, 2000)
+        })
+      })
+    })
+  </script>
+{% endblock %}

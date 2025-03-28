@@ -7,13 +7,33 @@
 
 {% block content %}
   <div class="container">
-    <h1>Draw something</h1>
+    <h1>
+      {% if room %}
+        {{ room.name }}
+      {% else %}
+        Public Drawing Room
+      {% endif %}
+    </h1>
+
+    <!-- Room info and sharing -->
+    <div class="room-info">
+      {% if room %}
+        <p>Room created by: {{ room.creator.username }}</p>
+      {% endif %}
+      <div class="share-link">
+        <input type="text" id="room-url" value="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}" readonly />
+        <button id="copy-link" class="btn btn-sm btn-info">Copy Link</button>
+      </div>
+    </div>
 
     <!-- User info section -->
     <div class="user-info">
       <span>Your color: <span class="drawing-indicator" id="user-color-indicator"></span></span>
       <span id="client-id"></span>
     </div>
+
+    <!-- Store room name for JavaScript -->
+    <input type="hidden" id="room-name" value="{{ room_name }}" />
 
     <!-- Drawing Board -->
     <div id="game-container">
@@ -41,4 +61,17 @@
 
 {% block extra_js %}
   <script src="{% static 'js/canvas.js' %}"></script>
+  <script>
+    // Copy room URL to clipboard
+    document.getElementById('copy-link').addEventListener('click', function () {
+      const urlField = document.getElementById('room-url')
+      urlField.select()
+      navigator.clipboard.writeText(urlField.value).then(() => {
+        this.textContent = 'Copied!'
+        setTimeout(() => {
+          this.textContent = 'Copy Link'
+        }, 2000)
+      })
+    })
+  </script>
 {% endblock %}

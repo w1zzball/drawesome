@@ -1,0 +1,39 @@
+{% extends 'base_generic.html' %}
+{% load static %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/game.css' %}" />
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h1>Create Drawing Room</h1>
+
+    <div class="create-room-form">
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label for="{{ form.name.id_for_label }}">Room Name:</label>
+          {{ form.name }}
+          {% if form.name.errors %}
+            <div class="form-error">{{ form.name.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group form-check">
+          {{ form.is_private }}
+          <label for="{{ form.is_private.id_for_label }}">Make this room private</label>
+          {% if form.is_private.errors %}
+            <div class="form-error">{{ form.is_private.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Create Room</button>
+          <a href="{% url 'rooms:room_list' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
