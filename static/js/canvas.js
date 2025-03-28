@@ -8,12 +8,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Get room code from hidden input
-    const roomCodeElement = document.getElementById('room-code');
-    const roomCode = roomCodeElement ? roomCodeElement.value : 'default';
+    const roomCodeElement = document.getElementById('room-name');
+    const roomCode = roomCodeElement && roomCodeElement.value.trim() ? roomCodeElement.value.trim() : 'lobby'; // Default to 'lobby' if roomCode is missing or empty
 
-    // WebSocket connection setup - FIXED to support HTTPS/WSS and room-specific connections
+    // WebSocket connection setup
     const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
-    let url = `${protocol}${window.location.host}/ws/drawing/${roomCode}/`;
+    const url = `${protocol}${window.location.host}/ws/room/${roomCode}/`;  // Ensure this matches the Django route
     console.log('Connecting to WebSocket:', url);
     const socket = new WebSocket(url);
 

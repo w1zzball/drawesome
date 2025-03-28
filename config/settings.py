@@ -17,6 +17,7 @@ import dj_database_url
 if os.path.exists('env.py'):
     import env  # noqa: F401 - imports env variables
 
+ASGI_APPLICATION = 'config.asgi.application'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -58,7 +59,6 @@ INSTALLED_APPS = [
     'rooms',
 ]
 
-ASGI_APPLICATION = 'config.asgi.application'
 
 CHANNEL_LAYERS = {
     'default': {
