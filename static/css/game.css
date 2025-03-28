@@ -31,11 +31,13 @@
 }
 
 #game-area {
-  flex: 4;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: var(--primary-color);
+  max-width: 100%;
+  width: calc(100% - 300px);
+  flex: 0 1 937px;
 }
 
 #game-sidebar {
