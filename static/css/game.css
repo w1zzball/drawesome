@@ -81,7 +81,7 @@
 }
 
 #chat-messages {
-  height: 250px; 
+  height: 250px;
   overflow-y: auto; /* Make the chat scrollable */
   border: 1px solid var(--border-color);
   border-radius: 4px;
@@ -89,19 +89,19 @@
   margin-top: 10px;
   background-color: var(--background-color, #f9f9f9);
   display: flex;
-  flex-direction: column; 
-  gap: 5px; 
-  font-size: 0.9rem; 
-  flex-grow: 1; 
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.9rem;
+  flex-grow: 1;
   color: var(--text-color);
 }
 
 #chat-messages p {
-  margin: 0; 
+  margin: 0;
   padding: 5px 8px;
-  word-wrap: break-word; 
-  max-width: 100%; 
-  line-height: 1.4; 
+  word-wrap: break-word;
+  max-width: 100%;
+  line-height: 1.4;
 }
 
 #chat-form {
@@ -111,7 +111,7 @@
 }
 
 #chat-message {
-  color : var(--text-color)
+  color: var(--text-color);
   flex-grow: 1;
   padding: 8px;
   border: 1px solid var(--border-color);
