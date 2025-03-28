@@ -11,7 +11,6 @@
 
     <div class="room-actions">
       <a href="{% url 'rooms:create_room' %}" class="btn btn-primary">Create New Room</a>
-      <a href="{% url 'rooms:room' room_slug='lobby' %}" class="btn btn-secondary">Join Public Room</a>
     </div>
 
     <div class="room-list">
@@ -21,7 +20,7 @@
           {% for room in rooms %}
             <li class="room-item">
               <div class="room-info">
-                <h3>{{ room.name }}</h3>
+                <h3><a href="{% url 'rooms:room' room_slug=room.slug %}">{{ room.name }}</a></h3>
                 <p>Created by {{ room.creator.username }} on {{ room.created_at|date:'M d, Y' }}</p>
               </div>
               <div class="room-actions">
