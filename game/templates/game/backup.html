@@ -6,26 +6,27 @@
 {% endblock %}
 
 {% block content %}
-  <div id="game-container">
-    <!-- Header Section -->
-    <header id="game-header">
+  <div id="game-meta">
+    <!-- Header -->
+    {% comment %} <header id="game-header">
       <!-- Placeholder for header content -->
-    </header>
+    </header> {% endcomment %}
 
-    <!-- Main Game Area -->
-    <main id="game-main">
-      <section id="game-area">
+    <!-- main Game Area -->
+    <div id="game-container">
+      <input type="hidden" id="room-name" value="test" />
+      <div id="game-area">
         <canvas id="drawingCanvas" width="800" height="600"></canvas>
-      </section>
-      <aside id="game-sidebar">
+      </div>
+      <div id="game-sidebar">
         <div id="game-chat"></div>
         <div id="game-guess">
           <p>Your Guess:</p>
           <input type="text" id="guess-input" />
           <button id="guess-button">Submit</button>
         </div>
-      </aside>
-    </main>
+      </div>
+    </div>
   </div>
 {% endblock %}
 

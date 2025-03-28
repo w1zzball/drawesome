@@ -1,23 +1,39 @@
-nav {
-  background-color: #333;
-  padding: 1rem;
+/* colours */
+:root {
+  --primary-color: #4a4e69; /* Dark purple */
+  --secondary-color: #9a8c98; /* Muted lavender */
+  --background-color: #22223b; /* Very dark blue */
+  --text-color: #f2e9e4; /* Light beige */
+  --border-color: #4a4e69; /* Matches primary color */
+}
+/* -- */
+/* body */
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+/* -- */
+
+/* round corners */
+.rounded {
+  border-radius: 4px;
+}
+
+.account-form {
+  background: #ffffff;
+  color: #000000;
+  padding: 1px 20px 20px 20px;
+  border-radius: 10px;
+  margin: 60px auto;
+  width: 350px;
+  max-width: 90%;
+}
+
+form p {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
 }
 
-nav a {
-  color: white;
-  text-decoration: none;
-  margin: 0 1rem;
-  font-size: 1rem;
-}
-
-nav a:hover {
-  text-decoration: underline;
-}
-
-#logo {
-  height: 50px;
-  border-radius: 50%;
+form input {
+  padding: 10px;
 }

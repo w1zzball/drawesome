@@ -1,5 +1,164 @@
+#game-meta div {
+  border-radius: 4px;
+}
+
 #drawingCanvas {
-  border: 1px solid black;
+  border: 1px solid var(--border-color);
   display: block;
-  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+  align-self: start;
+}
+
+#drawing-board {
+  height: 100%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 80vh;
+  gap: 5px;
+}
+
+#game-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-height: 100%;
+  gap: 5px;
+  aspect-ratio: 1.4 / 1;
+}
+
+#game-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary-color);
+  max-width: 100%;
+  width: calc(100% - 300px);
+  flex: 0 1 937px;
+}
+
+#game-sidebar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background-color: var(--primary-color);
+  border-left: 1px solid var(--border-color);
+}
+
+#game-chat {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 15px;
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+#game-guess {
+  padding-top: 10px;
+}
+
+#guess-input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  max-width: fit-content;
+}
+
+#game-meta {
+  width: 100%;
+}
+
+#game-header {
+  padding: 10px;
+  background-color: var(--primary-color);
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 10px;
+  color: var(--text-color);
+}
+
+#chat-messages {
+  height: 250px;
+  overflow-y: auto; /* Make the chat scrollable */
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: var(--background-color, #f9f9f9);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.9rem;
+  flex-grow: 1;
+  color: var(--text-color);
+}
+
+#chat-messages p {
+  margin: 0;
+  padding: 5px 8px;
+  word-wrap: break-word;
+  max-width: 100%;
+  line-height: 1.4;
+}
+
+#chat-form {
+  display: flex;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+#chat-message {
+  color: var(--text-color);
+  flex-grow: 1;
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--background-color, #ffffff);
+}
+
+#chat-messages p strong {
+  font-weight: bold;
+  color: var(--accent-color, #4a6fa5);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#chat-messages p {
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+/* Style for system messages (like "User joined" or "Canvas cleared") */
+#chat-messages p em {
+  font-style: italic;
+  color: var(--secondary-text-color, #666);
+}
+
+@media all and (max-width: 850px) {
+  #game-container {
+    flex-direction: column;
+  }
+
+  #game-area {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+  }
 }
