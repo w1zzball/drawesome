@@ -51,6 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (colorPicker) colorPicker.value = initialColor;
     if (userColorIndicator) userColorIndicator.style.backgroundColor = initialColor;
 
+    // Store the user's color
+    const userColor = initialColor;
+
     // Initialize canvas
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
@@ -272,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.send(
             JSON.stringify({
                 type: 'request_canvas_state',
-                clientId: clientId, // Ensure the same unique client ID is used
+                clientId: clientId,
                 roomCode: roomCode
             })
         );
@@ -281,10 +284,10 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.send(
             JSON.stringify({
                 type: 'chat_message',
-                clientId: clientId, // Use the same unique client ID
+                clientId: clientId,
                 roomCode: roomCode,
                 message: 'joined the drawing room',
-                color: initialColor
+                color: userColor // Include the user's color
             })
         );
     };
@@ -330,10 +333,13 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (data.type === 'chat_message') {
                 let messages = document.getElementById('chat-messages');
                 if (messages) {
-                    const sender = data.clientId ? `User ${data.clientId}` : 'Anonymous'; // Use the same unique client ID
-                    // Sanitize the message content to prevent HTML injection
+                    const sender = data.clientId ? `User ${data.clientId}` : 'Anonymous';
                     const sanitizedMessage = escapeHTML(data.message);
-                    messages.insertAdjacentHTML('beforeend', `<p><strong>${sender}:</strong> ${sanitizedMessage}</p>`);
+                    const senderColor = data.color || '#000000'; // Default to black if no color is provided
+                    messages.insertAdjacentHTML(
+                        'beforeend',
+                        `<p><strong style="color: ${senderColor};">${sender}:</strong> ${sanitizedMessage}</p>`
+                    );
                     messages.scrollTop = messages.scrollHeight;
                 }
             } else if (data.type === 'draw_line') {
@@ -374,10 +380,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 socket.send(
                     JSON.stringify({
                         type: 'chat_message',
-                        clientId: clientId, // Use the same unique client ID
+                        clientId: clientId,
                         roomCode: roomCode,
                         message: message,
-                        color: colorPicker ? colorPicker.value : initialColor
+                        color: userColor // Include the user's color
                     })
                 );
                 messageInputDom.value = '';
