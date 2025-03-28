@@ -221,6 +221,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    //helper function for escaping HTML
+    function escapeHTML(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
     // WebSocket event handlers
     socket.onopen = () => {
         console.log('WebSocket connection established');
@@ -254,7 +261,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 let messages = document.getElementById('chat-messages');
                 if (messages) {
                     const sender = data.clientId ? `User ${data.clientId.substring(0, 6)}` : 'Anonymous';
-                    messages.insertAdjacentHTML('beforeend', `<p><strong>${sender}:</strong> ${data.message}</p>`);
+                    // Sanitize the message content to prevent HTML injection
+                    const sanitizedMessage = escapeHTML(data.message);
+                    messages.insertAdjacentHTML('beforeend', `<p><strong>${sender}:</strong> ${sanitizedMessage}</p>`);
                     messages.scrollTop = messages.scrollHeight;
                 }
             } else if (data.type === 'draw_line') {
@@ -270,7 +279,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // You could add a message showing who cleared the canvas
                 let messages = document.getElementById('chat-messages');
                 if (messages) {
-                    messages.insertAdjacentHTML('beforeend', `<p><em>Canvas cleared by user ${data.clientId.substring(0, 6)}</em></p>`);
+                    const sender = data.clientId ? `User ${data.clientId.substring(0, 6)}` : 'Anonymous';
+                    messages.insertAdjacentHTML('beforeend', `<p><em>Canvas cleared by user ${sender}</em></p>`);
                 }
             }
         } catch (error) {
