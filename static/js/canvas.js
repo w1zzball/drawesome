@@ -272,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.send(
             JSON.stringify({
                 type: 'request_canvas_state',
-                clientId: clientId,
+                clientId: clientId, // Ensure the same unique client ID is used
                 roomCode: roomCode
             })
         );
@@ -281,7 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.send(
             JSON.stringify({
                 type: 'chat_message',
-                clientId: clientId,
+                clientId: clientId, // Use the same unique client ID
                 roomCode: roomCode,
                 message: 'joined the drawing room',
                 color: initialColor
@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (data.type === 'chat_message') {
                 let messages = document.getElementById('chat-messages');
                 if (messages) {
-                    const sender = data.clientId ? `User ${data.clientId.substring(0, 6)}` : 'Anonymous';
+                    const sender = data.clientId ? `User ${data.clientId}` : 'Anonymous'; // Use the same unique client ID
                     // Sanitize the message content to prevent HTML injection
                     const sanitizedMessage = escapeHTML(data.message);
                     messages.insertAdjacentHTML('beforeend', `<p><strong>${sender}:</strong> ${sanitizedMessage}</p>`);
@@ -374,7 +374,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 socket.send(
                     JSON.stringify({
                         type: 'chat_message',
-                        clientId: clientId,
+                        clientId: clientId, // Use the same unique client ID
                         roomCode: roomCode,
                         message: message,
                         color: colorPicker ? colorPicker.value : initialColor
