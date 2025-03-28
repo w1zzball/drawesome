@@ -151,3 +151,13 @@
   font-style: italic;
   color: var(--secondary-text-color, #666);
 }
+
+@media all and (max-width: 850px) {
+  #game-container {
+    flex-direction: column;
+  }
+
+  #game-area {
+    width: 100%;
+  }
+}
