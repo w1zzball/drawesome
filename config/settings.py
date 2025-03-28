@@ -37,6 +37,12 @@ ALLOWED_HOSTS = ['.herokuapp.com',
                  'localhost',
                  '127.0.0.1']
 
+# CSRF settings for secure forms
+CSRF_TRUSTED_ORIGINS = [
+    'https://drawesome-dfd603524b06.herokuapp.com',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+]
 
 # Application definition
 
