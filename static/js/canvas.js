@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const imageData = canvas.toDataURL('image/jpeg', 0.5);
 
             if (socket && socket.readyState === WebSocket.OPEN) {
-                console.log(`Saving canvas state for room: ${roomCode}`);
+                // console.log(`Saving canvas state for room: ${roomCode}`);
                 socket.send(
                     JSON.stringify({
                         type: 'canvas_save',
@@ -300,16 +300,16 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.onmessage = (e) => {
         try {
             const data = JSON.parse(e.data);
-            console.log('Message received of type:', data.type); // More specific logging
+            // console.log('Message received of type:', data.type); // More specific logging
 
             if (data.type === 'canvas_state') {
-                console.log('Canvas state received, loading image...');
+                // console.log('Canvas state received, loading image...');
                 // Load the existing canvas state
                 if (data.image_data && (data.image_data.startsWith('data:image/jpeg') ||
                     data.image_data.startsWith('data:image/png'))) {
                     const img = new Image();
                     img.onload = function () {
-                        console.log('Image loaded successfully, dimensions:', img.width, 'x', img.height);
+                        // console.log('Image loaded successfully, dimensions:', img.width, 'x', img.height);
                         // Clear the canvas first
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
                         // Draw the saved canvas state

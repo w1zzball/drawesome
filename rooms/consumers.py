@@ -86,20 +86,20 @@ class DrawingConsumer(AsyncWebsocketConsumer):
 
             # Handle canvas state saving
             if data_type == 'canvas_save' and 'image_data' in data:
-                print(
-                    f"Saving canvas state for room: {room_code} (data length: {len(data['image_data'])}, type: {type(data['image_data'])})")
+                # print(
+                #     f"Saving canvas state for room: {room_code} (data length: {len(data['image_data'])}, type: {type(data['image_data'])})")
                 # Store the canvas state
                 DrawingConsumer.canvas_states[room_code] = data['image_data']
-                print(
-                    f"Canvas state saved. Current states: {list(DrawingConsumer.canvas_states.keys())}")
+                # print(
+                #     f"Canvas state saved. Current states: {list(DrawingConsumer.canvas_states.keys())}")
 
             # Handle canvas state requests
             elif data_type == 'request_canvas_state':
-                print(f"Canvas state requested for room: {room_code}")
+                # print(f"Canvas state requested for room: {room_code}")
                 # If we have a state for this room, send it directly to the requester
                 if room_code in DrawingConsumer.canvas_states:
-                    print(
-                        f"Sending stored canvas state for room: {room_code} (data length: {len(DrawingConsumer.canvas_states[room_code])})")
+                    # print(
+                    #     f"Sending stored canvas state for room: {room_code} (data length: {len(DrawingConsumer.canvas_states[room_code])})")
                     await self.send(text_data=json.dumps({
                         'type': 'canvas_state',
                         'image_data': DrawingConsumer.canvas_states[room_code]
