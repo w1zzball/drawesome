@@ -50,3 +50,14 @@ def room_list(request):
     """
     rooms = Room.objects.filter(is_private=False).order_by('-created_at')
     return render(request, 'rooms/room_list.html', {'rooms': rooms})
+
+
+@login_required
+def delete_room(request, room_slug):
+    room = get_object_or_404(Room, slug=room_slug)
+    if room.is_creator(request.user):
+        room.delete()
+        messages.success(request, "Room deleted successfully.")
+    else:
+        messages.error(request, "You are not authorized to delete this room.")
+    return redirect('rooms:room_list')

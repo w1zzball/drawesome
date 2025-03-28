@@ -19,3 +19,6 @@ class Room(models.Model):
 
     def __str__(self):
         return self.name
+
+    def is_creator(self, user):
+        return self.creator == user

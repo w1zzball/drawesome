@@ -98,3 +98,12 @@ h2 {
 .room-actions .btn-info:hover {
   background-color: #138496;
 }
+
+.room-actions .btn-danger {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.room-actions .btn-danger:hover {
+  background-color: #c82333;
+}
