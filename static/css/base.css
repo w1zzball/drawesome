@@ -18,3 +18,22 @@ body {
 .rounded {
   border-radius: 4px;
 }
+
+.account-form {
+  background: #ffffff;
+  color: #000000;
+  padding: 1px 20px 20px 20px;
+  border-radius: 10px;
+  margin: 60px auto;
+  width: 350px;
+  max-width: 90%;
+}
+
+form p {
+  display: flex;
+  flex-direction: column;
+}
+
+form input {
+  padding: 10px;
+}
