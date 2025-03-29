@@ -21,7 +21,7 @@
         <p>Room created by: {{ room.creator.username }}</p>
       {% endif %}
       <div class="share-link">
-        <input type="text" id="room-url" value="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}" readonly />
+        <input type="text" id="room-url" value="https://{{ request.get_host }}{{ request.path }}" readonly />
         <button id="copy-link" class="btn btn-sm btn-info">Copy Link</button>
       </div>
     </div>
